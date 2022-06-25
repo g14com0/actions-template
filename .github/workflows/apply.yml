@@ -16,7 +16,7 @@ on:
 jobs:
   apply:
     runs-on: ubuntu-latest
-    if: github.event_name != 'repository_dispatch' || github.event_name != 'pull_request'
+    if: (github.event_name != 'repository_dispatch' || github.event_name != 'pull_request')
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v2
