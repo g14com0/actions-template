@@ -16,7 +16,7 @@ on:
 jobs:
   destroy:
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' || github.event_name != 'repository_dispatch'
     environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v2
