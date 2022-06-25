@@ -1,0 +1,37 @@
+name: apply
+
+on: 
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      pathToApply:
+        required: true
+        type: string
+    secrets:
+      GOOGLE_CREDENTIALS:
+        required: true
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    needs: plan
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform init
+        id: init
+        run: terraform -chdir=${{ inputs.pathToApply }} init -no-color
+        env:
+            GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform -chdir=${{ inputs.pathToApply }} apply -no-color --auto-approve
+        env:
+            GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
