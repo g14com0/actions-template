@@ -28,19 +28,19 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform -chdir=environments/${{ inputs.environment }} init -no-color
+        run: terraform -chdir=${{ inputs.pathToPlan }} init -no-color
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Validate
         id: validate
-        run: terraform -chdir=environments/${{ inputs.environment }} validate -no-color
+        run: terraform -chdir=${{ inputs.pathToPlan }} validate -no-color
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=environments/${{ inputs.environment }} plan -no-color
+        run: terraform -chdir=${{ inputs.pathToPlan }} plan -no-color
         continue-on-error: true
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
