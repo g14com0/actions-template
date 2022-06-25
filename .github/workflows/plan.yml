@@ -21,7 +21,7 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Format
+      - name: Terraform fmt
         id: fmt
         run: terraform fmt -check -recursive -no-color
         continue-on-error: true
@@ -32,20 +32,20 @@ jobs:
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Terraform Validate
+      - name: Terraform validate
         id: validate
         run: terraform -chdir=${{ inputs.pathToPlan }} validate -no-color
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Terraform Plan
+      - name: Terraform plan
         id: plan
         run: terraform -chdir=${{ inputs.pathToPlan }} plan -no-color
         continue-on-error: true
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Update Pull Request
+      - name: Update pull request
         if: github.event_name == 'pull_request'
         uses: actions/github-script@0.9.0
         env:
@@ -79,12 +79,12 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-      - name: Terraform fmt Status
+      - name: Terraform fmt status
         if: steps.fmt.outcome == 'failure'
         run: |
           echo "${{ steps.fmt.outputs.stdout }}" && exit 1
 
-      - name: Terraform plan Status
+      - name: Terraform plan statu
         if: steps.plan.outcome == 'failure'
         run: |
           echo "${{ steps.plan.outputs.stdout }}" && exit 1

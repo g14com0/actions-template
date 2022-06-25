@@ -1,4 +1,4 @@
-name: apply
+name: destroy
 
 on: 
   workflow_call:
@@ -6,7 +6,7 @@ on:
       environment:
         required: true
         type: string
-      pathToApply:
+      pathToDestroy:
         required: true
         type: string
     secrets:
@@ -25,12 +25,12 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform -chdir=${{ inputs.pathToApply }} init -no-color
+        run: terraform -chdir=${{ inputs.pathToDestroy }} init -no-color
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Terraform apply
-        id: apply
-        run: terraform -chdir=${{ inputs.pathToApply }} apply -no-color --auto-approve
+      - name: Terraform destroy
+        id: destroy
+        run: terraform -chdir=${{ inputs.pathToDestroy }} destroy -no-color --auto-approve
         env:
             GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
